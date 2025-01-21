@@ -1,3 +1,6 @@
+// !!! Need to install ControlP5 library to run this code !!!
+// !!! Got to Sketch -> Import Library -> Manage libraries -> Search for ControlP5 -> Click install !!!
+
 import controlP5.*;
 
 PImage original, redVersion, greenVersion, blueVersion;
@@ -90,6 +93,29 @@ void draw() {
     textSize(12);
     text("Select a filter | press keys 0-9 to apply filters", sectionWidth + 50, sectionHeight/2 - 10);
       
+    if (mouseX < width && mouseY < height) {
+        color pixelColor;
+        if (mouseY < sectionHeight) {
+            if (mouseX < sectionWidth) {
+                int imgX = int(map(mouseX, 0, sectionWidth, 0, sample1.width));
+                int imgY = int(map(mouseY, 0, sectionHeight, 0, sample1.height));
+                pixelColor = sample1.get(imgX, imgY);
+                drawPieChart(mouseX + 30, mouseY + 30, pixelColor);
+            }
+        } else {
+            int imgX = int(map(mouseX % sectionWidth, 0, sectionWidth, 0, sample1.width));
+            int imgY = int(map(mouseY - sectionHeight, 0, sectionHeight, 0, sample1.height));
+            if (mouseX < sectionWidth) {
+                pixelColor = redVersion.get(imgX, imgY);
+            } else if (mouseX < sectionWidth * 2) {
+                pixelColor = blueVersion.get(imgX, imgY);
+            } else {
+                pixelColor = greenVersion.get(imgX, imgY);
+            }
+            drawPieChart(mouseX + 30, mouseY + 30, pixelColor);
+        }
+    }
+    
     calculateAndDrawColorGraph();
 }
 
@@ -189,6 +215,41 @@ void keyPressed() {
         case '7': filterSelection(7); break;
         case '8': filterSelection(8); break;
         case '9': filterSelection(9); break;
+    }
+}
+
+void drawPieChart(int x, int y, color c) {
+    float r = red(c);
+    float g = green(c);
+    float b = blue(c);
+    float total = r + g + b;
+    
+    if (total > 0) {
+        float redAngle = (r / total) * TWO_PI;
+        float greenAngle = (g / total) * TWO_PI;
+        float blueAngle = (b / total) * TWO_PI;
+        
+        float diameter = 60;
+        float lastAngle = 0;
+        
+        noStroke();
+        
+        fill(255, 0, 0);
+        arc(x, y, diameter, diameter, lastAngle, lastAngle + redAngle);
+        lastAngle += redAngle;
+        
+        fill(0, 255, 0);
+        arc(x, y, diameter, diameter, lastAngle, lastAngle + greenAngle);
+        lastAngle += greenAngle;
+        
+        fill(0, 0, 255);
+        arc(x, y, diameter, diameter, lastAngle, lastAngle + blueAngle);
+        
+        fill(255);
+        textSize(10);
+        text(String.format("R: %.0f%%", (r/total)*100), x + diameter/2 + 5, y - 10);
+        text(String.format("G: %.0f%%", (g/total)*100), x + diameter/2 + 5, y + 5);
+        text(String.format("B: %.0f%%", (b/total)*100), x + diameter/2 + 5, y + 20);
     }
 }
 
