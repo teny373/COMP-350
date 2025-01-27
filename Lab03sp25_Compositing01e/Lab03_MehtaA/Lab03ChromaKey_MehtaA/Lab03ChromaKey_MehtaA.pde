@@ -4,9 +4,9 @@ int threshold = 50;
 
 void setup() {
 	size(900, 600);
-	daiki = loadImage("data/daiki_chroma.png");
+	daiki = loadImage("../data/daiki_chroma.png");
 	daiki.resize(width, height);
-	background = loadImage("data/mariokartbg.jpg");
+	background = loadImage("../data/mariokartbg.jpg");
 	background.resize(width, height);
 	
     background_with_filter = background.copy();
