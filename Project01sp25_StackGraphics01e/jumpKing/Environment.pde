@@ -60,7 +60,6 @@ public class EnvironmentHandler {
 				float minOverlap = min(min(overlapLeft, overlapRight), min(overlapTop, overlapBottom));
 				
 				if (minOverlap == overlapTop && currentPlayer.yvel >= 0) {
-					// Top collision
 					currentPlayer.ypos = platformTop - currentPlayer.hitboxHeight / 2;
 					currentPlayer.yvel = 0;
 					currentPlayer.isOnGround = true;
@@ -70,15 +69,12 @@ public class EnvironmentHandler {
 						currentPlayer.xvel = 0;
 					}
 				} else if (minOverlap == overlapBottom && currentPlayer.yvel <= 0) {
-					// Bottom collision
 					currentPlayer.ypos = platformBottom + currentPlayer.hitboxHeight / 2;
 					currentPlayer.yvel = 0;
 				} else if (minOverlap == overlapLeft) {
-					// Left collision - bounce!
 					currentPlayer.xpos = platformLeft - currentPlayer.hitboxWidth / 2;
 					currentPlayer.xvel = -currentPlayer.xvel * currentPlayer.bounceMultiplier; // Reverse and reduce velocity
 				} else if (minOverlap == overlapRight) {
-					// Right collision - bounce!
 					currentPlayer.xpos = platformRight + currentPlayer.hitboxWidth / 2;
 					currentPlayer.xvel = -currentPlayer.xvel * currentPlayer.bounceMultiplier; // Reverse and reduce velocity
 				}
@@ -87,32 +83,27 @@ public class EnvironmentHandler {
 	}
 	
 	private void checkWindowEdges() {
-		// Left edge - bounce
 		if (currentPlayer.xpos - currentPlayer.hitboxWidth / 2 < 0) {
 			currentPlayer.xpos = currentPlayer.hitboxWidth / 2;
 			currentPlayer.xvel = -currentPlayer.xvel * currentPlayer.bounceMultiplier; // Bounce off left edge
 		}
 		
-		// Right edge - bounce
 		if (currentPlayer.xpos + currentPlayer.hitboxWidth / 2 > width) {
 			currentPlayer.xpos = width - currentPlayer.hitboxWidth / 2;
 			currentPlayer.xvel = -currentPlayer.xvel * currentPlayer.bounceMultiplier; // Bounce off right edge
 		}
 		
-		// Top edge
 		if (currentPlayer.ypos - currentPlayer.hitboxHeight / 2 < 0) {
 			currentPlayer.ypos = currentPlayer.hitboxHeight / 2;
 			currentPlayer.yvel = 0;
 		}
 		
-		// Bottom edge - can also be treated as ground
 		if (currentPlayer.ypos + currentPlayer.hitboxHeight / 2 > height) {
 			currentPlayer.ypos = height - currentPlayer.hitboxHeight / 2;
 			currentPlayer.yvel = 0;
 			currentPlayer.isOnGround = true;
 			currentPlayer.canJump = true;
 			
-			// Stop horizontal movement on landing
 			if (!currentPlayer.wasOnGround) {
 				currentPlayer.xvel = 0;
 			}

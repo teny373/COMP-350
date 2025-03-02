@@ -25,14 +25,21 @@ public class Player extends Person {
 	boolean canJump = false;
 	boolean isCharging = false;
 	boolean wasOnGround = false; 
+	boolean facingRight = true; 
 	
 	float mouseX;
 	float mouseY;
 	
 	float arrowLength = 50;
+	PImage guy;
 	
 	public Player(float x, float y, float w, float h) {	
 		super(x, y, w, h);	
+		try {
+			guy = loadImage("data/guy.png");
+		} catch (Exception e) {
+			println("Error loading player image: " + e.getMessage());
+		}
 	}
 	
 	public void update() {
@@ -83,9 +90,22 @@ public class Player extends Person {
 	}
 	
 	public void display() {
-		fill(255, 0, 0); 
-		rectMode(CENTER);
-		rect(xpos, ypos, hitboxWidth, hitboxHeight);
+		if (guy != null) {
+			imageMode(CENTER);
+			
+			pushMatrix();
+			translate(xpos, ypos);
+			
+			if (!facingRight) {
+				scale(-1, 1);
+			}
+			image(guy, 0, 0, hitboxWidth, hitboxHeight);	
+			popMatrix();
+		} else {
+			fill(255, 0, 0); 
+			rectMode(CENTER);
+			rect(xpos, ypos, hitboxWidth, hitboxHeight);
+		}
 		
 		if (isCharging && canJump) {
 			float dx = mouseX - xpos;
@@ -145,6 +165,7 @@ public class Player extends Person {
 	
 	public void updateMousePosition(float x, float y) {
 		mouseX = x;
-		mouseY = y;
+		mouseY = y;	
+		facingRight = (x > xpos);
 	}
 }
