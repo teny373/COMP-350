@@ -26,9 +26,9 @@ public class GameState {
 		// Control instructions
 		textSize(24);
 		text("Press 'ESC' to pause the game", width / 2, height/2 - 120);
-		text("Press 'W' to jump", width / 2, height/2 - 80);
-		text("Press 'A' to move left", width / 2, height/2 - 40);
-		text("Press 'D' to move right", width / 2, height/2);
+		text("Hold SPACEBAR to charge jump", width / 2, height/2 - 80);
+		text("Release SPACEBAR to jump", width / 2, height/2 - 40);
+		text("Aim with mouse to set jump direction", width / 2, height/2);
 		text("Press 'R' to restart the game", width / 2, height/2 + 40);
 		text("Press 'Q' to quit the game", width / 2, height/2 + 80);
 		

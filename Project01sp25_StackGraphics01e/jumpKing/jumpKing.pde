@@ -6,13 +6,12 @@ void setup() {
 	background(255);
 	
 	Platform[] platforms = {
-		new Platform(250, 475, 500, 50),
-			new Platform(250, 200, 200, 50),
-			new Platform(250, 300, 200, 50),
-			new Platform(250, 100, 200, 50)
+			new Platform(250, 500, 500, 10),
+
+			new Platform(50, 400, 50, 10),
 		};
 	
-	envHandler = new EnvironmentHandler(new Player(50, 50, 20, 20), platforms);
+	envHandler = new EnvironmentHandler(new Player(250, 400, 20, 20), platforms);
 	gameState = new GameState();
 }
 
@@ -31,6 +30,10 @@ void draw() {
 void keyPressed() {	
 	envHandler.handleKeyPressed();
 	gameState.handleKeyPressed();
+}
+
+void keyReleased() {
+	envHandler.handleKeyReleased();
 }
 
 void mousePressed() {
