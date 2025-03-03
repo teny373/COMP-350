@@ -4,29 +4,46 @@ color dirtColor = color(139, 69, 19);
 public class EnvironmentHandler {
 	
 	Player currentPlayer;
-	Platform[] platforms;
+	int totalLevels = 2;
+	int currentLevel = 0;
+	Platform[][] platforms;
 	
-	EnvironmentHandler(Player player, Platform[] p) {
+	// Add a cooldown timer to prevent multiple level changes in a single jump
+	int levelChangeCooldown = 0;
+	
+	EnvironmentHandler(Player player, Platform[][] p) {
 		currentPlayer = player;	
 		platforms = p;
 	}
 	
-	public void setPlatforms(Platform[] p) {
+	public void setPlatforms(Platform[][] p) {
 		platforms = p;	
 	}
 	
 	public void update() {
+		// Decrease level change cooldown if it's active
+		if (levelChangeCooldown > 0) {
+			levelChangeCooldown--;
+		}
+
 		background(255);
 		
 		currentPlayer.updateMousePosition(mouseX, mouseY);
 		
+		checkLevel();
 		currentPlayer.update();
 		
 		checkCollisions();
-		
-		for (int i = 0; i < platforms.length; i++) {
-			platforms[i].display();	
+			
+		for (int i = 0; i < platforms[currentLevel].length; i++) {
+			platforms[currentLevel][i].display();	
 		}
+		
+		// Display level indicator
+		fill(0);
+		textAlign(LEFT, TOP);
+		textSize(16);
+		text("Level: " + (currentLevel + 1), 10, 10);
 	}
 	
 	public void checkCollisions() {
@@ -38,7 +55,7 @@ public class EnvironmentHandler {
 	}
 	
 	private void checkPlatformCollisions() {
-		for (Platform platform : platforms) {
+		for (Platform platform : platforms[currentLevel]) {
 			float playerLeft = currentPlayer.xpos - currentPlayer.hitboxWidth / 2;
 			float playerRight = currentPlayer.xpos + currentPlayer.hitboxWidth / 2;
 			float playerTop = currentPlayer.ypos - currentPlayer.hitboxHeight / 2;
@@ -92,20 +109,40 @@ public class EnvironmentHandler {
 			currentPlayer.xpos = width - currentPlayer.hitboxWidth / 2;
 			currentPlayer.xvel = -currentPlayer.xvel * currentPlayer.bounceMultiplier; // Bounce off right edge
 		}
-		
-		if (currentPlayer.ypos - currentPlayer.hitboxHeight / 2 < 0) {
-			currentPlayer.ypos = currentPlayer.hitboxHeight / 2;
-			currentPlayer.yvel = 0;
-		}
-		
-		if (currentPlayer.ypos + currentPlayer.hitboxHeight / 2 > height) {
-			currentPlayer.ypos = height - currentPlayer.hitboxHeight / 2;
-			currentPlayer.yvel = 0;
-			currentPlayer.isOnGround = true;
-			currentPlayer.canJump = true;
+	}
+	
+	private void checkLevel() {
+		if (levelChangeCooldown <= 0) {
+			if (currentPlayer.ypos - currentPlayer.hitboxHeight/2 < 0) {
+				if (currentLevel < totalLevels - 1) {
+					currentLevel++;
+					println("Level up to: " + (currentLevel + 1));
+					
+					currentPlayer.ypos = height - currentPlayer.hitboxHeight;	
+					levelChangeCooldown = 30; // 30 frames cooldown
+				} else {
+					currentPlayer.ypos = currentPlayer.hitboxHeight/2;
+					currentPlayer.yvel = 0;
+				}
+			}
 			
-			if (!currentPlayer.wasOnGround) {
-				currentPlayer.xvel = 0;
+			if (currentPlayer.ypos + currentPlayer.hitboxHeight/2 > height) {
+				if (currentLevel > 0) {
+					currentLevel--;
+					println("Level down to: " + (currentLevel + 1));
+					
+					currentPlayer.ypos = currentPlayer.hitboxHeight;	
+					levelChangeCooldown = 30;
+				} else {
+					currentPlayer.ypos = height - currentPlayer.hitboxHeight/2;
+					currentPlayer.yvel = 0;
+					currentPlayer.isOnGround = true;
+					currentPlayer.canJump = true;
+					
+					if (!currentPlayer.wasOnGround) {
+						currentPlayer.xvel = 0;
+					}
+				}
 			}
 		}
 	}

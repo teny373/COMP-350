@@ -44,7 +44,6 @@ public class GameState {
 	}
 	
 	public void displayMainMenu() {
-		// Background
 		fill(255);
 		rectMode(CENTER);
 		rect(width / 2, height / 2, width, height);
@@ -66,7 +65,6 @@ public class GameState {
 		// Quit button
 		rect(width / 2, height/2 + buttonGap, buttonSize[0], buttonSize[1]);
 		
-		// Button text
 		fill(0);
 		textAlign(CENTER, CENTER);
 		textSize(32);

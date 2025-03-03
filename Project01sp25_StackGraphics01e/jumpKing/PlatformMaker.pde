@@ -13,7 +13,6 @@ class PlatformMaker {
   
   void handleKey(char keyChar) {
     if (keyChar == 'p') {
-      // Toggle platform drawing mode
       isActive = !isActive;
       isDrawing = false;
       if (isActive) {
@@ -23,7 +22,6 @@ class PlatformMaker {
       }
     }
     else if (keyChar == 's' && isActive) {
-      // Print out all created platforms
       println("\n// Generated platform code:");
       println("Platform[] platforms = {");
       println("\tnew Platform(250, 500, 500, 10), // Ground platform");
@@ -36,7 +34,6 @@ class PlatformMaker {
       println("};\n");
     }
     else if (keyChar == 'c' && isActive) {
-      // Clear all created platforms
       createdPlatforms.clear();
       println("All created platforms cleared.");
     }
@@ -63,19 +60,15 @@ class PlatformMaker {
     if (isActive && isDrawing) {
       isDrawing = false;
       
-      // Calculate center, width and height for the platform
       float centerX = (startPoint.x + currentPoint.x) / 2;
       float centerY = (startPoint.y + currentPoint.y) / 2;
       float width = abs(currentPoint.x - startPoint.x);
       float height = abs(currentPoint.y - startPoint.y);
       
-      // Only create platforms that have a minimum size
       if (width > 5 && height > 5) {
-        // Create the platform
         Platform newPlatform = new Platform(centerX, centerY, width, height);
         createdPlatforms.add(newPlatform);
         
-        // Print platform details
         println("Platform created: x=" + centerX + ", y=" + centerY + 
                 ", width=" + width + ", height=" + height);
       }
@@ -84,12 +77,10 @@ class PlatformMaker {
   
   void display() {
     if (isActive) {
-      // Draw all created platforms
       for (Platform p : createdPlatforms) {
         p.display();
       }
       
-      // Show current drawing rectangle
       if (isDrawing) {
         stroke(255, 0, 0);
         strokeWeight(2);
@@ -97,13 +88,11 @@ class PlatformMaker {
         rectMode(CORNERS);
         rect(startPoint.x, startPoint.y, currentPoint.x, currentPoint.y);
         
-        // Reset drawing settings
         strokeWeight(1);
         stroke(0);
         rectMode(CENTER);
       }
       
-      // Show helper text
       fill(0);
       textAlign(LEFT, TOP);
       textSize(12);
