@@ -29,8 +29,8 @@ public class GameState {
 		text("Hold SPACEBAR to charge jump", width / 2, height/2 - 80);
 		text("Release SPACEBAR to jump", width / 2, height/2 - 40);
 		text("Aim with mouse to set jump direction", width / 2, height/2);
-		text("Press 'R' to restart the game", width / 2, height/2 + 40);
-		text("Press 'Q' to quit the game", width / 2, height/2 + 80);
+		// text("Press 'R' to restart the game", width / 2, height/2 + 40);
+		// text("Press 'Q' to quit the game", width / 2, height/2 + 80);
 		
 		// Back button
 		fill(200, 200, 200);
