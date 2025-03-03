@@ -24,7 +24,6 @@ class PlatformMaker {
     else if (keyChar == 's' && isActive) {
       println("\n// Generated platform code:");
       println("Platform[] platforms = {");
-      println("\tnew Platform(250, 500, 500, 10), // Ground platform");
       
       for (Platform p : createdPlatforms) {
         println("\tnew Platform(" + p.xpos + ", " + p.ypos + ", " + 

@@ -4,24 +4,24 @@ color dirtColor = color(139, 69, 19);
 public class EnvironmentHandler {
 	
 	Player currentPlayer;
-	int totalLevels = 2;
+	int totalLevels;
 	int currentLevel = 0;
 	Platform[][] platforms;
 	
-	// Add a cooldown timer to prevent multiple level changes in a single jump
 	int levelChangeCooldown = 0;
 	
-	EnvironmentHandler(Player player, Platform[][] p) {
+	EnvironmentHandler(Player player, Platform[][] p, int startLevel) {
 		currentPlayer = player;	
 		platforms = p;
+		totalLevels = p.length;
+		currentLevel = startLevel;
 	}
-	
+
 	public void setPlatforms(Platform[][] p) {
 		platforms = p;	
 	}
 	
 	public void update() {
-		// Decrease level change cooldown if it's active
 		if (levelChangeCooldown > 0) {
 			levelChangeCooldown--;
 		}
@@ -37,13 +37,7 @@ public class EnvironmentHandler {
 			
 		for (int i = 0; i < platforms[currentLevel].length; i++) {
 			platforms[currentLevel][i].display();	
-		}
-		
-		// Display level indicator
-		fill(0);
-		textAlign(LEFT, TOP);
-		textSize(16);
-		text("Level: " + (currentLevel + 1), 10, 10);
+		}		
 	}
 	
 	public void checkCollisions() {
@@ -116,7 +110,7 @@ public class EnvironmentHandler {
 			if (currentPlayer.ypos - currentPlayer.hitboxHeight/2 < 0) {
 				if (currentLevel < totalLevels - 1) {
 					currentLevel++;
-					println("Level up to: " + (currentLevel + 1));
+					// println("Level up to: " + (currentLevel + 1));
 					
 					currentPlayer.ypos = height - currentPlayer.hitboxHeight;	
 					levelChangeCooldown = 30; // 30 frames cooldown
@@ -129,7 +123,7 @@ public class EnvironmentHandler {
 			if (currentPlayer.ypos + currentPlayer.hitboxHeight/2 > height) {
 				if (currentLevel > 0) {
 					currentLevel--;
-					println("Level down to: " + (currentLevel + 1));
+					// println("Level down to: " + (currentLevel + 1));
 					
 					currentPlayer.ypos = currentPlayer.hitboxHeight;	
 					levelChangeCooldown = 30;
