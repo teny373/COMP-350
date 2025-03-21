@@ -1,0 +1,25 @@
+# MTL file - created by a modified js OBJExporter
+
+newmtl astnt1_1
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000
+illum 1
+Pr 1
+Pds 1
+Pl 1
+Ka 1 1 1
+Kd 0.5843137502670288 0.5843137502670288 0.5843137502670288
+Ke 0 0 0
+map_Kd astnt1_1.png
+
+newmtl astnt1_2
+Tr 0.0000
+Tf 1.0000 1.0000 1.0000
+illum 1
+Pr 0.7305881977081299
+Pds 1
+Pl 1
+Ka 1 1 1
+Kd 0.5843137502670288 0.5843137502670288 0.5843137502670288
+Ke 0 0 0
+map_Kd astnt1_2.png
