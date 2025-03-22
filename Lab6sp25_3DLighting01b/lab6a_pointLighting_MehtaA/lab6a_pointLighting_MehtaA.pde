@@ -45,6 +45,24 @@ void draw() {
 	noLights();
 	
 	placeCamera();	
+
+	if (showOrignal) {
+		ambientLight(255, 255, 235);
+	} else {
+		threePointLighting();
+	}
+	
+	drawScene();
+	drawSceneButton();
+}
+
+void placeCamera() {	
+	camera(cameraEyeCoords[0], cameraEyeCoords[1], cameraEyeCoords[2], 
+		cameraCenterCoords[0], cameraCenterCoords[1], cameraCenterCoords[2], 
+		0, 1, 0);
+}
+
+void threePointLighting() {
 	
 	// ---- fill light (right side)
 	float rightLightX = cameraEyeCoords[0] + rightLightDistance;
@@ -91,13 +109,6 @@ void draw() {
 		12
 		);
 	
-	drawScene();
-}
-
-void placeCamera() {	
-	camera(cameraEyeCoords[0], cameraEyeCoords[1], cameraEyeCoords[2], 
-		cameraCenterCoords[0], cameraCenterCoords[1], cameraCenterCoords[2], 
-		0, 1, 0);
 }
 
 void drawSceneButton() {
@@ -114,7 +125,7 @@ void drawSceneButton() {
 	
 	fill(255);
 	textAlign(CENTER, CENTER);
-	text(showOrignal ? "First Person" : "Original View", buttonX + buttonWidth / 2, buttonY + buttonHeight / 2);
+	text(showOrignal ? "3 point lighiting" : "Ambient lighiting", buttonX + buttonWidth / 2, buttonY + buttonHeight / 2);
 	
 	hint(ENABLE_DEPTH_TEST); // Re-enable depth testing for 3D rendering
 }
