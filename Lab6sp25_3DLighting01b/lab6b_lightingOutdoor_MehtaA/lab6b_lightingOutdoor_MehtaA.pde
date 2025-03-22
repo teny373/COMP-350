@@ -9,23 +9,6 @@ int groundSize = 1400;
 int[] lunarModuleCords = {300, 450, 200};
 int lunarModuleSize = 250;
 
-float[] cameraEyeCoords = {
-	astronautCords[0],
-	astronautCords[1] - 25,
-	astronautCords[2] + 80
-};
-
-float[] cameraCenterCoords = {
-	astronautCords[0],
-	astronautCords[1] - 40,
-	astronautCords[2]
-};
-
-float rightLightDistance = 50;
-float leftLightDistance = 100;  
-float heightLightDistance = 60;
-float backLightDistance = 200;
-
 boolean showOrignal = false;
 int buttonWidth = 100;
 int buttonHeight = 40;
@@ -41,63 +24,15 @@ void setup() {
 }
 
 void draw() {
-	background(0);	
-	noLights();
+	background(0);
+	lights();	
 	
-	placeCamera();	
-	
-	// ---- fill light (right side)
-	float rightLightX = cameraEyeCoords[0] + rightLightDistance;
-	float rightLightY = cameraEyeCoords[1];              
-	float rightLightZ = cameraEyeCoords[2];              
-	
-	spotLight(
-		255, 255, 230,
-		rightLightX, rightLightY, rightLightZ,                
-		cameraCenterCoords[0] - rightLightX,        
-		cameraCenterCoords[1] - rightLightY,        
-		cameraCenterCoords[2] - rightLightZ,        
-		PI / 4,
-		5
-		);
-	
-	// ---- key light (left side and above)
-	float leftLightX = cameraEyeCoords[0] - leftLightDistance;  
-	float leftLightY = cameraEyeCoords[1] - heightLightDistance; 
-	float leftLightZ = cameraEyeCoords[2];                      
-	
-	spotLight(
-		220, 220, 255,
-		leftLightX, leftLightY, leftLightZ,
-		cameraCenterCoords[0] - leftLightX,
-		cameraCenterCoords[1] - leftLightY,
-		cameraCenterCoords[2] - leftLightZ,
-		PI / 4,
-		8
-		);
-	
-	// ---- back light
-	float backLightX = leftLightX;
-	float backLightY = leftLightY;
-	float backLightZ = astronautCords[2] - backLightDistance;
-	
-	spotLight(
-		255, 240, 200,
-		backLightX, backLightY, backLightZ,
-		cameraCenterCoords[0] - backLightX,
-		cameraCenterCoords[1] - backLightY,
-		cameraCenterCoords[2] - backLightZ,
-		PI / 4,                                  
-		12
-		);
+	if (!showOrignal) {	
+		camera(astronautCords[0] + 10, astronautCords[1],(astronautCords[2] - 50) / tan(PI * 30.0 / 180.0), width / 2.0, height / 2.0, 0, 0, 1, 0);
+	}
 	
 	drawScene();
-}
-
-void placeCamera() {	
-	camera(cameraEyeCoords[0], cameraEyeCoords[1], cameraEyeCoords[2], 
-		cameraCenterCoords[0], cameraCenterCoords[1], cameraCenterCoords[2], 
-		0, 1, 0);
+	drawSceneButton();
 }
 
 void drawSceneButton() {
@@ -115,7 +50,7 @@ void drawSceneButton() {
 	fill(255);
 	textAlign(CENTER, CENTER);
 	text(showOrignal ? "First Person" : "Original View", buttonX + buttonWidth / 2, buttonY + buttonHeight / 2);
-	
+		
 	hint(ENABLE_DEPTH_TEST); // Re-enable depth testing for 3D rendering
 }
 
@@ -152,3 +87,4 @@ void drawScene() {
 	shape(astronaut, 0, 0, astronautSize, astronautSize);
 	popMatrix();
 }
+
