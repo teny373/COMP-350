@@ -26,10 +26,12 @@ float leftLightDistance = 100;
 float heightLightDistance = 60;
 float backLightDistance = 200;
 
+boolean ambientLighiting = false;
 boolean showOrignal = false;
 int buttonWidth = 100;
 int buttonHeight = 40;
 int buttonX, buttonY = 10; // buttonX will be calculated based on width
+
 
 void setup() {
 	size(800, 800, P3D);
@@ -45,8 +47,8 @@ void draw() {
 	noLights();
 	
 	placeCamera();	
-
-	if (showOrignal) {
+	
+	if (ambientLighiting) {
 		ambientLight(255, 255, 235);
 	} else {
 		threePointLighting();
@@ -54,12 +56,15 @@ void draw() {
 	
 	drawScene();
 	drawSceneButton();
+	drawLightButton();
 }
 
 void placeCamera() {	
-	camera(cameraEyeCoords[0], cameraEyeCoords[1], cameraEyeCoords[2], 
-		cameraCenterCoords[0], cameraCenterCoords[1], cameraCenterCoords[2], 
-		0, 1, 0);
+	if (!showOrignal) {		
+		camera(cameraEyeCoords[0], cameraEyeCoords[1], cameraEyeCoords[2], 
+			cameraCenterCoords[0], cameraCenterCoords[1], cameraCenterCoords[2], 
+			0, 1, 0);
+	}
 }
 
 void threePointLighting() {
@@ -125,7 +130,26 @@ void drawSceneButton() {
 	
 	fill(255);
 	textAlign(CENTER, CENTER);
-	text(showOrignal ? "3 point lighiting" : "Ambient lighiting", buttonX + buttonWidth / 2, buttonY + buttonHeight / 2);
+	text(showOrignal ? "Close up" : "Far", buttonX + buttonWidth / 2, buttonY + buttonHeight / 2);
+	
+	hint(ENABLE_DEPTH_TEST); // Re-enable depth testing for 3D rendering
+}
+
+void drawLightButton() {
+	buttonX = width - buttonWidth - 10;
+	
+	fill(100, 100, 200);
+	rectMode(CORNER);
+	
+	hint(DISABLE_DEPTH_TEST); // Button in 2D screen space, not affected by 3D transformations
+	camera();
+	noLights();
+	
+	rect(buttonX, buttonY + buttonHeight + 10, buttonWidth, buttonHeight);
+	
+	fill(255);
+	textAlign(CENTER, CENTER);
+	text(ambientLighiting ? "3 point lighiting" : "Ambient lighiting", buttonX + buttonWidth / 2, buttonY + buttonHeight + 10 + buttonHeight / 2);
 	
 	hint(ENABLE_DEPTH_TEST); // Re-enable depth testing for 3D rendering
 }
@@ -134,6 +158,10 @@ void mousePressed() {
 	if (mouseX > buttonX && mouseX < buttonX + buttonWidth && 
 		mouseY > buttonY && mouseY < buttonY + buttonHeight) {
 		showOrignal = !showOrignal;
+	}
+	if (mouseX > buttonX && mouseX < buttonX + buttonWidth && 
+		mouseY > buttonY + buttonHeight + 10 && mouseY < buttonY + buttonHeight + 10 + buttonHeight) {
+		ambientLighiting = !ambientLighiting;
 	}
 }
 
