@@ -24,15 +24,43 @@ void setup() {
 }
 
 void draw() {
-	background(0);
-	lights();	
+	background(0);	
+	noLights();
 	
-	if (!showOrignal) {	
-		camera(astronautCords[0] + 10, astronautCords[1],(astronautCords[2] - 50) / tan(PI * 30.0 / 180.0), width / 2.0, height / 2.0, 0, 0, 1, 0);
+	if (showOrignal) {
+		// ambientLight(255, 255, 235);
+		lights();
+	} else {
+		outdoorLighiting();
 	}
 	
 	drawScene();
 	drawSceneButton();
+}
+
+void outdoorLighiting() {
+	float lightX = astronautCords[0] + 100;
+	float lightY = 100;
+	float lightZ = astronautCords[2] + 400;
+	
+	pointLight(255, 255, 235, lightX, lightY, lightZ);
+	
+	pointLight(0, 0, 0, 100, lightY, lightZ - 200);
+	
+	float spotAngle = radians(120);
+	float spotDistance = 300;
+	
+	float spotX = lunarModuleCords[0];
+	float spotY = lunarModuleCords[1] - spotDistance * sin(spotAngle);
+	float spotZ = lunarModuleCords[2] - spotDistance * cos(spotAngle); 
+	
+	spotLight(
+		50, 50, 255,
+		spotX, spotY, spotZ,
+		0, 1, 0.5, 
+		PI / 3,
+		2 
+		);
 }
 
 void drawSceneButton() {
@@ -49,8 +77,8 @@ void drawSceneButton() {
 	
 	fill(255);
 	textAlign(CENTER, CENTER);
-	text(showOrignal ? "First Person" : "Original View", buttonX + buttonWidth / 2, buttonY + buttonHeight / 2);
-		
+	text(showOrignal ? "Custom Outdoor lighiting" : "Default lighiting", buttonX + buttonWidth / 2, buttonY + buttonHeight / 2);
+	
 	hint(ENABLE_DEPTH_TEST); // Re-enable depth testing for 3D rendering
 }
 
