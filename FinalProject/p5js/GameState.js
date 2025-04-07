@@ -1,6 +1,6 @@
 class GameState {
   constructor() {
-    this.isPaused = false;
+    this.isPaused = true;
     this.showControls = false;
     this.pointerLocked = false;
     
