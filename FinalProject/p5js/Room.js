@@ -19,47 +19,47 @@ class Room {
     // Draw the room boundaries
     box(this.width, this.height, this.depth);
     
-    // Add some objects in the room
-    push();
-    translate(100, 50, 100);
-    fill(this.objectColor1);
-    box(50);
-    pop();
+    // // Add some objects in the room
+    // push();
+    // translate(100, 50, 100);
+    // fill(this.objectColor1);
+    // box(50);
+    // pop();
     
-    push();
-    translate(-100, 0, -100);
-    fill(this.objectColor2);
-    sphere(30);
-    pop();
+    // push();
+    // translate(-100, 0, -100);
+    // fill(this.objectColor2);
+    // sphere(30);
+    // pop();
     
-    // Create a table
-    push();
-    translate(0, 100, 0);
-    fill(this.tableColor);
-    box(150, 10, 80);   // Table top
+    // // Create a table
+    // push();
+    // translate(0, 100, 0);
+    // fill(this.tableColor);
+    // box(150, 10, 80);   // Table top
     
-    // Table legs
-    push();
-    translate(-60, 50, -30);
-    box(10, 100, 10);
-    pop();
+    // // Table legs
+    // push();
+    // translate(-60, 50, -30);
+    // box(10, 100, 10);
+    // pop();
     
-    push();
-    translate(60, 50, -30);
-    box(10, 100, 10);
-    pop();
+    // push();
+    // translate(60, 50, -30);
+    // box(10, 100, 10);
+    // pop();
     
-    push();
-    translate(-60, 50, 30);
-    box(10, 100, 10);
-    pop();
+    // push();
+    // translate(-60, 50, 30);
+    // box(10, 100, 10);
+    // pop();
     
-    push();
-    translate(60, 50, 30);
-    box(10, 100, 10);
-    pop();
+    // push();
+    // translate(60, 50, 30);
+    // box(10, 100, 10);
+    // pop();
     
-    pop();
+    // pop();
     
     // Add some walls
     push();

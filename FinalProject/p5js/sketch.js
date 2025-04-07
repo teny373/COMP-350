@@ -3,14 +3,29 @@ let room;
 let gameState;
 let myFont;
 
+let BFG_model;
+
 function preload() {
   myFont = loadFont('https://cdnjs.cloudflare.com/ajax/libs/topcoat/0.8.0/font/SourceCodePro-Bold.otf');
+  BFG_model = loadModel(
+    'data/BFG-9000.obj',
+    function () {
+      console.log("BFG model loaded successfully");
+    },
+    function () {
+      console.error("Error loading BFG model");
+    });
 }
 
 function setup() {
   let mainCanvas = createCanvas(windowWidth, windowHeight, WEBGL);
 
-  player = new Player(0, 0, 0, 20);
+  let playerWeapons = [
+    new Pistol(),
+    // new BFG(BFG_model),
+  ]
+
+  player = new Player(0, 0, 0, 20, playerWeapons);
   room = new Room(400, 300, 400);
   gameState = new GameState();
 
@@ -39,7 +54,7 @@ function draw() {
 
     player.update();
     room.display();
-    
+
     pop();
 
     if (player.hasWeapon()) {

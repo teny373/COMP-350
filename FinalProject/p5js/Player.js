@@ -1,5 +1,5 @@
 class Player {
-  constructor(x, y, z, size) {
+  constructor(x, y, z, size, weapons) {
     // Position and movement properties
     this.pos = createVector(x, y, z);
     this.size = size;
@@ -24,12 +24,10 @@ class Player {
     this.armor = 0;
     
     // Weapon handling
-    this.weapons = [];
+    this.weapons = weapons;
     this.currentWeaponIndex = 0;
     this.isFiring = false;
-    
-    // Initialize with a pistol
-    this.addWeapon(new Pistol());
+     
   }
   
   update() {
