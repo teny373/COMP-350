@@ -68,6 +68,63 @@ class GameState {
     pop();
   }
   
+  displayHUD(player) {
+    if (this.isPaused || this.showControls) return;
+    
+    // Reset camera for UI
+    camera();
+    push();
+    drawingContext.disable(drawingContext.DEPTH_TEST)
+    
+    // Move to 2D rendering
+    translate(-width/2, -height/2);
+    
+    // Player location (top left)
+    textAlign(LEFT, TOP);
+    fill(255);
+    textSize(14);
+    text(`X: ${player.pos.x.toFixed(1)} Y: ${player.pos.y.toFixed(1)} Z: ${player.pos.z.toFixed(1)}`, 10, 10);
+    
+    // Health and armor (bottom left)
+    textSize(16);
+    fill(255, 0, 0); // Red for health
+    text(`HEALTH: ${player.health}`, 10, height - 60);
+    fill(0, 100, 255); // Blue for armor
+    text(`ARMOR: ${player.armor}`, 10, height - 30);
+    
+    // Weapon info (bottom right)
+    if (player.hasWeapon()) {
+      let weapon = player.getCurrentWeapon();
+      textAlign(RIGHT, BOTTOM);
+      fill(255);
+      textSize(16);
+      text(`${weapon.name}`, width - 10, height - 40);
+      text(`Ammo: ${weapon.currentAmmo}/${weapon.maxAmmo}`, width - 10, height - 10);
+    }
+    
+    // Draw crosshair in the center of screen
+    stroke(255);
+    strokeWeight(1);
+    fill(255);
+    
+    // Simple cross crosshair design
+    let crosshairSize = 10;
+    let centerX = width / 2;
+    let centerY = height / 2;
+    
+    // Horizontal line
+    line(centerX - crosshairSize, centerY, centerX + crosshairSize, centerY);
+    
+    // Vertical line
+    line(centerX, centerY - crosshairSize, centerX, centerY + crosshairSize);
+    
+    // Small dot in center (optional)
+    noStroke();
+    ellipse(centerX, centerY, 2, 2);
+    
+    drawingContext.enable(drawingContext.DEPTH_TEST)
+    pop();
+  }
   
   handleKeyPressed(key, keyCode) {
     // Handle audio context whenever a key is pressed

@@ -39,12 +39,15 @@ function draw() {
 
     player.update();
     room.display();
+    
+    pop();
 
     if (player.hasWeapon()) {
       player.getCurrentWeapon().display();
     }
-    pop();
 
+    // Add this line to display the HUD when game is running
+    gameState.displayHUD(player);
   }
 
   if (gameState.showControls) {
