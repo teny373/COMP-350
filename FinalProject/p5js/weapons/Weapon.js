@@ -1,5 +1,5 @@
 class Weapon {
-  constructor(name, damage, fireRate, reloadTime, magazineSize, accuracy) {
+  constructor(name, damage, fireRate, reloadTime, magazineSize, accuracy, model) {
     this.name = name;
     this.damage = damage;
     this.fireRate = fireRate; // Shots per second
@@ -13,10 +13,19 @@ class Weapon {
     this.isReloading = false;
     this.lastFireTime = 0;
 
+    this.displayX = 200;
+    this.displayY = 160;
+    this.displayZ = -150;
+
     // Visual properties
-    this.model = null
-    this.modelScale = 1.0;
+    this.model = model
+    this.modelScale = 4.0; // Changed from 1.0 to 4.0 to make models 4x bigger
     this.modelColor = color(200);
+
+    // Animation properties
+    this.recoilAmount = 0;
+    this.maxRecoil = 15;
+    this.recoilRecoveryRate = 0.8;
   }
 
   update() {
@@ -77,17 +86,39 @@ class Weapon {
   }
 
   display() {
-    // Draw weapon model - override in specific weapons
     push();
-    drawingContext.disable(drawingContext.DEPTH_TEST)
+    drawingContext.disable(drawingContext.DEPTH_TEST);
 
+    // Move to 2D rendering coordinates
+    translate(-width / 2, -height / 2, 0);
 
-    fill(this.modelColor);
-    // Position at bottom right of screen
-    translate(width / 4, height / 3, -50);
-    box(20 * this.modelScale, 5 * this.modelScale, 40 * this.modelScale);
+    // Calculate recoil animation
+    if (millis() - this.lastFireTime < 150) {
+      // Apply recoil
+      this.recoilAmount = this.maxRecoil;
+    } else if (this.recoilAmount > 0) {
+      // Recover from recoil
+      this.recoilAmount *= this.recoilRecoveryRate;
+      if (this.recoilAmount < 0.1) this.recoilAmount = 0;
+    }
 
-    drawingContext.enable(drawingContext.DEPTH_TEST)
+    if (this.model) {
+      translate(width - this.displayX, height - this.displayY + this.recoilAmount, this.displayZ);
+
+      rotateZ(PI);
+      rotateY(PI / 4);
+      rotateX(PI / 8);
+      scale(this.modelScale);
+
+      ambientLight(255,0,0);
+      model(this.model);
+    } else {
+      fill(this.modelColor);
+      translate(width / 4, height / 3, -50);
+      box(20 * this.modelScale, 5 * this.modelScale, 40 * this.modelScale);
+    }
+
+    drawingContext.enable(drawingContext.DEPTH_TEST);
     pop();
   }
 }

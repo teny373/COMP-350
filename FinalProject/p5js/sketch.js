@@ -4,16 +4,27 @@ let gameState;
 let myFont;
 
 let BFG_model;
+let Shotgun_model;
 
 function preload() {
   myFont = loadFont('https://cdnjs.cloudflare.com/ajax/libs/topcoat/0.8.0/font/SourceCodePro-Bold.otf');
   BFG_model = loadModel(
     'data/BFG-9000.obj',
+    true,
     function () {
       console.log("BFG model loaded successfully");
     },
     function () {
       console.error("Error loading BFG model");
+    });
+  Shotgun_model = loadModel(
+    'data/Shtgnn.obj',
+    true,
+    function () {
+      console.log("Shotgun model loaded successfully");
+    },
+    function () {
+      console.error("Error loading Shotgun model");
     });
 }
 
@@ -21,8 +32,9 @@ function setup() {
   let mainCanvas = createCanvas(windowWidth, windowHeight, WEBGL);
 
   let playerWeapons = [
+    new Weapon("BFG-9000", 15, 50, 2, 400, 0.8, BFG_model),
     new Pistol(),
-    // new BFG(BFG_model),
+    new Shotgun(Shotgun_model),
   ]
 
   player = new Player(0, 0, 0, 20, playerWeapons);
