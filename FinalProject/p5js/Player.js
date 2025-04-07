@@ -1,5 +1,6 @@
 class Player {
   constructor(x, y, z, size) {
+    // Position and movement properties
     this.pos = createVector(x, y, z);
     this.size = size;
     this.speed = 5.0;
@@ -11,9 +12,24 @@ class Player {
     this.pitch = 0.0; // Rotation around X-axis
     this.velocity = createVector(0, 0, 0);
     
+    // Mouse properties
     this.prevMouseX = width / 2;
     this.prevMouseY = height / 2;
     this.sensitivity = 0.003;
+    
+    // Player stats
+    this.maxHealth = 100;
+    this.health = this.maxHealth;
+    this.maxArmor = 100;
+    this.armor = 0;
+    
+    // Weapon handling
+    this.weapons = [];
+    this.currentWeaponIndex = 0;
+    this.isFiring = false;
+    
+    // Initialize with a pistol
+    this.addWeapon(new Pistol());
   }
   
   update() {
@@ -54,6 +70,16 @@ class Player {
       this.pos.z + cos(this.yaw) * cos(this.pitch),  // Look-at point
       0, 1, 0  // Up vector
     );
+
+    // Update current weapon
+    if (this.hasWeapon()) {
+      this.getCurrentWeapon().update();
+      
+      // Handle firing
+      if (this.isFiring) {
+        this.getCurrentWeapon().fire();
+      }
+    }
   }
   
   resetPosition() {
@@ -88,6 +114,22 @@ class Player {
     if (key === 's' || key === 'S') this.moveBackward = true;
     if (key === 'a' || key === 'A') this.moveLeft = true;    
     if (key === 'd' || key === 'D') this.moveRight = true;    
+
+    // Weapon switching
+    if (key === '1' && this.weapons.length >= 1) this.switchWeapon(0);
+    if (key === '2' && this.weapons.length >= 2) this.switchWeapon(1);
+    if (key === '3' && this.weapons.length >= 3) this.switchWeapon(2);
+    
+    // Next/previous weapon
+    if (key === 'q' || key === 'Q') this.prevWeapon();
+    if (key === 'e' || key === 'E') this.nextWeapon();
+    
+    // Reload weapon
+    if (key === 'r' || key === 'R') {
+      if (this.hasWeapon()) {
+        this.getCurrentWeapon().reload();
+      }
+    }
   }
   
   handleKeyReleased(key, keyCode) {
@@ -95,5 +137,83 @@ class Player {
     if (key === 's' || key === 'S') this.moveBackward = false;
     if (key === 'a' || key === 'A') this.moveLeft = false;  
 	  if (key === 'd' || key === 'D') this.moveRight = false;
+  }
+
+  // Weapon methods
+  hasWeapon() {
+    return this.weapons.length > 0;
+  }
+  
+  getCurrentWeapon() {
+    if (this.hasWeapon()) {
+      return this.weapons[this.currentWeaponIndex];
+    }
+    return null;
+  }
+  
+  addWeapon(weapon) {
+    this.weapons.push(weapon);
+    // Switch to the new weapon
+    this.currentWeaponIndex = this.weapons.length - 1;
+  }
+  
+  switchWeapon(index) {
+    if (index >= 0 && index < this.weapons.length) {
+      this.currentWeaponIndex = index;
+    }
+  }
+  
+  nextWeapon() {
+    if (this.hasWeapon()) {
+      this.currentWeaponIndex = (this.currentWeaponIndex + 1) % this.weapons.length;
+    }
+  }
+  
+  prevWeapon() {
+    if (this.hasWeapon()) {
+      this.currentWeaponIndex = (this.currentWeaponIndex - 1 + this.weapons.length) % this.weapons.length;
+    }
+  }
+  
+  // Player stat methods
+  takeDamage(amount) {
+    // Armor absorbs damage first
+    if (this.armor > 0) {
+      if (amount <= this.armor) {
+        this.armor -= amount;
+        amount = 0;
+      } else {
+        amount -= this.armor;
+        this.armor = 0;
+      }
+    }
+    
+    // Remaining damage affects health
+    this.health = max(0, this.health - amount);
+    
+    // Check if player died
+    if (this.health <= 0) {
+      this.die();
+    }
+  }
+  
+  heal(amount) {
+    this.health = min(this.maxHealth, this.health + amount);
+  }
+  
+  addArmor(amount) {
+    this.armor = min(this.maxArmor, this.armor + amount);
+  }
+  
+  die() {
+    // Reset player
+    this.resetPosition();
+    this.health = this.maxHealth;
+    this.armor = 0;
+    
+    // Notify game state
+    if (gameState) {
+      gameState.playerDied();
+    }
   }
 }

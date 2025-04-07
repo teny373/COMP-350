@@ -11,11 +11,15 @@ function preload() {
 function setup() {
   // Create canvas that fills the window
   createCanvas(windowWidth, windowHeight, WEBGL);
+  // let gl = document.getElementById('defaultCanvas0').getContext('webgl');
+  let gl = drawingContext;
+  console.log(gl, 'gl');
+  
 
   // Create instances of our classes
   player = new Player(0, 0, 0, 20);
   room = new Room(400, 300, 400);
-  gameState = new GameState();
+  gameState = new GameState(gl);
 
   // Set the font
   textFont(myFont);
@@ -40,14 +44,23 @@ function draw() {
   if (gameState.isPaused) {
     gameState.displayMainMenu();
   } else {
-    // Set ambient light
-    ambientLight(50, 50, 50);
-    // Add directional light
-    directionalLight(255, 255, 255, 0, 1, -1);
 
-    // Update player and room
+    push();
+    
+    ambientLight(50, 50, 50);
+    directionalLight(255, 255, 255, 0, 1, -1);
+    
     player.update();
     room.display();
+    
+    if (player.hasWeapon()) {
+      player.getCurrentWeapon().display();
+    }
+
+
+    gameState.displayHUD();
+    pop();
+    
   }
 
   if (gameState.showControls) {
@@ -70,20 +83,57 @@ function keyReleased() {
 }
 
 function mouseMoved() {
-  if (!gameState.isPaused && !gameState.showControls && gameState.pointerLocked) {
-    // When pointer is locked, use movedX and movedY instead of mouseX/mouseY
-    player.handleMouseLook(movedX, movedY);
+  // Check if gameState exists before accessing it
+  if (typeof gameState !== 'undefined' && 
+      gameState !== null && 
+      !gameState.isPaused && 
+      !gameState.showControls &&
+      gameState.pointerLocked) {
+    
+    // Check if player exists before calling handleMouseLook
+    if (typeof player !== 'undefined' && player !== null) {
+      player.handleMouseLook(movedX, movedY);
+    }
+  }
+  return false;
+}
+
+// Add an event listener to handle audio context
+function touchStarted() {
+  // This will help with the AudioContext issues
+  if (getAudioContext().state !== 'running') {
+    getAudioContext().resume();
   }
   return false;
 }
 
 function mousePressed() {
-  if (gameState.isPaused && !gameState.showControls) {
-    gameState.isPaused = false;
-    gameState.requestPointerLock();
-    return false;
+  // Handle audio context
+  if (getAudioContext().state !== 'running') {
+    getAudioContext().resume();
   }
-  gameState.handleMousePressed();
+  
+  // Original mousePressed code
+  if (typeof gameState !== 'undefined' && gameState !== null) {
+    if (gameState.isPaused && !gameState.showControls) {
+      gameState.isPaused = false;
+      gameState.requestPointerLock();
+    } else if (!gameState.isPaused && gameState.pointerLocked) {
+      // Start firing if player exists
+      if (typeof player !== 'undefined' && player !== null) {
+        player.isFiring = true;
+      }
+    }
+  }
+  return false;
+}
+
+function mouseReleased() {
+  // Stop firing when mouse is released
+  if (typeof player !== 'undefined' && player !== null) {
+    player.isFiring = false;
+  }
+  return false;
 }
 
 function pointerLockChange() {
