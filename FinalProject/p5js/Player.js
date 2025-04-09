@@ -51,7 +51,7 @@ class Player {
     if (this.moveRight) {
       this.velocity.add(p5.Vector.mult(right, -this.speed)); 
     }
-    
+
     // Apply velocity to position
     this.pos.add(this.velocity);
     

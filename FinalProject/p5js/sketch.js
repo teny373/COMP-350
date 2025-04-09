@@ -2,6 +2,7 @@ let player;
 let room;
 let gameState;
 let myFont;
+let bullets = [];
 
 let BFG_model;
 let Shotgun_model;
@@ -38,7 +39,7 @@ function setup() {
   ]
 
   player = new Player(0, 0, 0, 20, playerWeapons);
-  room = new Room(400, 300, 400);
+  room = new Room(5000, 1000, 5000);
   gameState = new GameState();
 
   textFont(myFont);
@@ -66,6 +67,14 @@ function draw() {
 
     player.update();
     room.display();
+
+    for (let i = bullets.length - 1; i >= 0; i--) {
+      bullets[i].update(); // Update bullet position
+      bullets[i].display(); // Display bullet
+      if (bullets[i].lifetime > bullets[i].maxLifetime) {
+        bullets.splice(i, 1); // Remove bullet if it has exceeded its lifetime
+      }
+    }
 
     pop();
 
