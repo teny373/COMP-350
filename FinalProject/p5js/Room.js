@@ -4,7 +4,7 @@ class Room {
     this.height = height;
     this.depth = depth;
 
-    // 保存所有障碍物的边界信息
+
     this.colliders = [];
 
     // Colors
@@ -14,7 +14,7 @@ class Room {
     this.objectColor2 = color(0, 255, 0);
   }
 
-  // 用于添加 box 类型障碍物
+
   addBoxCollider({ x, y, z, w, h, d }, fillColor) {
     this.colliders.push({ x, y, z, w, h, d });
 
@@ -30,10 +30,10 @@ class Room {
     noFill();
     stroke(255);
 
-    // Room boundaries (边界框，仅用作参考)
+
     box(this.width, this.height, this.depth);
 
-    // 墙体和障碍物
+   
     this.addBoxCollider({
       x: this.width / 4,
       y: 0,
@@ -41,7 +41,7 @@ class Room {
       w: this.width / 2,
       h: this.height,
       d: 80
-    }, color(0, 255, 0)); // 绿色墙
+    }, color(0, 255, 0)); 
 
     this.addBoxCollider({
       x: this.width / 4,
@@ -50,7 +50,7 @@ class Room {
       w: this.width / 2,
       h: this.height,
       d: 80
-    }, color(0, 0, 255)); // 蓝色墙1
+    }, color(0, 0, 255)); 
 
     this.addBoxCollider({
       x: -this.width / 4,
@@ -59,9 +59,9 @@ class Room {
       w: this.width / 2,
       h: this.height,
       d: 80
-    }, color(0, 0, 255)); // 蓝色墙2
+    }, color(0, 0, 255)); 
 
-    // 左墙
+
     push();
     translate(-this.width / 2, 0, 0);
     rotateY(PI / 2);
@@ -69,7 +69,7 @@ class Room {
     plane(this.depth, this.height);
     pop();
 
-    // 右墙
+  
     push();
     translate(this.width / 2, 0, 0);
     rotateY(PI / 2);
@@ -77,7 +77,7 @@ class Room {
     plane(this.depth, this.height);
     pop();
 
-    // 顶部
+
     push();
     translate(0, -this.height / 2, 0);
     rotateX(PI / 2);
@@ -85,7 +85,7 @@ class Room {
     plane(this.width, this.depth);
     pop();
 
-    // 后墙（透明可见 box）
+
     push();
     translate(0, 0, -this.depth / 2);
     fill(this.wallColor);
