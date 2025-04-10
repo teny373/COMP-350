@@ -68,13 +68,13 @@ function draw() {
     player.update();
     room.display();
 
-    for (let i = bullets.length - 1; i >= 0; i--) {
-      bullets[i].update(); // Update bullet position
-      bullets[i].display(); // Display bullet
-      if (bullets[i].lifetime > bullets[i].maxLifetime) {
-        bullets.splice(i, 1); // Remove bullet if it has exceeded its lifetime
-      }
+    if (player.isFiring && player.hasWeapon()) {
+      player.getCurrentWeapon().fire(player.getDirection());
     }
+
+    player.getCurrentWeapon().update();
+    player.getCurrentWeapon().drawBullets();
+    
 
     pop();
 
